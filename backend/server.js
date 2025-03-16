@@ -46,6 +46,21 @@ app.delete("/api/questionnaires/:id", async (req, res) => {
   }
 });
 
+app.get("/api/questionnaires/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await db.collection("questionnaires").doc(id).get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ message: "Questionnaire not found" });
+    }
+
+    res.json({ id: doc.id, ...doc.data() });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching questionnaire", error });
+  }
+});
+
 app.put("/api/questionnaires/:id", async (req, res) => {
   try {
     const { id } = req.params;
