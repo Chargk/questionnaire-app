@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
 function App() {
+  const [questionnaires, setQuestionnaires] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/questionnaires")
+      .then((response) => response.json())
+      .then((data) => setQuestionnaires(data))
+      .catch((error) => console.error("Error fetching questionnaires:", error));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Questionnaire Catalog</h1>
+      <ul>
+        {questionnaires.map((q) => (
+          <li key={q.id}>
+            <h3>{q.name}</h3>
+            <p>{q.description}</p>
+            <p>Questions: {q.questionsCount}</p>
+            <p>Completions: {q.completions}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
