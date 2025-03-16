@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Container, Title, Button } from "./styles/GlobalStyles";
 
 function QuestionnaireCatalog() {
   const [questionnaires, setQuestionnaires] = useState([]);
@@ -34,11 +35,9 @@ function QuestionnaireCatalog() {
     }
   };
 
-  console.log("Current state of questionnaires:", questionnaires);
-
   return (
-    <div>
-      <h1>Questionnaire Catalog</h1>
+    <Container>
+      <Title>Questionnaire Catalog</Title>
       <ul>
         {questionnaires?.length > 0 ? (
           questionnaires.map((q) => (
@@ -48,11 +47,11 @@ function QuestionnaireCatalog() {
               <p>Questions: {q.questionsCount}</p>
               <p>Completions: {q.completions}</p>
 
-              <button onClick={() => alert("Edit feature coming soon!")}>
+              <Button onClick={() => alert("Edit feature coming soon!")}>
                 Edit
-              </button>
-              <button onClick={() => deleteQuestionnaire(q.id)}>Delete</button>
-              <button onClick={() => navigate(`/run/${q.id}`)}>Run</button>
+              </Button>
+              <Button onClick={() => deleteQuestionnaire(q.id)}>Delete</Button>
+              <Button onClick={() => navigate(`/run/${q.id}`)}>Run</Button>
             </li>
           ))
         ) : (
@@ -61,21 +60,21 @@ function QuestionnaireCatalog() {
       </ul>
 
       <div>
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+        <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
           ← Back
-        </button>
+        </Button>
         <span>
           {" "}
           {page} / {totalPages}{" "}
         </span>
-        <button
+        <Button
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}
         >
           Next →
-        </button>
+        </Button>
       </div>
-    </div>
+    </Container>
   );
 }
 

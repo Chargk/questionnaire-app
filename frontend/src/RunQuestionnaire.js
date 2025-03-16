@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Container, Title, Description, Info } from "./styles/GlobalStyles";
 
 function RunQuestionnaire() {
   const { id } = useParams();
@@ -21,11 +22,11 @@ function RunQuestionnaire() {
   if (!questionnaire) return <p>Questionnaire not found.</p>;
 
   return (
-    <div>
-      <h1>{questionnaire.name}</h1>
-      <p>{questionnaire.description}</p>
-      <p>Number of questions: {questionnaire.questionsCount}</p>
-    </div>
+    <Container>
+      <Title>{questionnaire.name}</Title>
+      <Description>{questionnaire.description}</Description>
+      <Info>Number of questions: {questionnaire.questionsCount}</Info>
+    </Container>
   );
 }
 
