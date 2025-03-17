@@ -55,6 +55,12 @@ app.get("/api/questionnaires/:id", async (req, res) => {
       return res.status(404).json({ message: "Questionnaire not found" });
     }
 
+    let questionnaire = { id: doc.id, ...doc.data() };
+
+    if (typeof questionnaire.questions === "string") {
+      questionnaire.questions = JSON.parse(questionnaire.questions);
+    }
+
     res.json({ id: doc.id, ...doc.data() });
   } catch (error) {
     res.status(500).json({ message: "Error fetching questionnaire", error });
