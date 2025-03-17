@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Title, Button } from "./styles/GlobalStyles";
+import { Link } from "react-router-dom";
 
 function QuestionnaireCatalog() {
   const [questionnaires, setQuestionnaires] = useState([]);
@@ -74,6 +75,9 @@ function QuestionnaireCatalog() {
           Next →
         </Button>
       </div>
+      <Link to="/create-questionnaire">
+        <button>Create New Questionnaire</button>
+      </Link>
     </Container>
   );
 }
