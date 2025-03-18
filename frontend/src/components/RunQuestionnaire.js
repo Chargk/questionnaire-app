@@ -6,7 +6,7 @@ import {
   Description,
   Info,
   Button,
-} from "./styles/GlobalStyles";
+} from "../styles/GlobalStyles";
 
 function RunQuestionnaire() {
   const { id } = useParams();

@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  max-width: 800px;
+  padding: 40px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
 `;
 
 export const Title = styled.h1`
   text-align: center;
-  color: #333;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
 `;
 
 export const Description = styled.p`
@@ -24,23 +24,69 @@ export const Info = styled.p`
 `;
 
 export const Button = styled.button`
-  background: #007bff;
-  color: white;
+  padding: 8px 12px;
   border: none;
-  padding: 10px;
-  margin-right: 5px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
-
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s;
   &:hover {
-    background: #0056b3;
+    background-color: #0056b3;
   }
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
 
-  &:last-child {
-    background: #28a745;
-    &:hover {
-      background: #218838;
-    }
+export const Grid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+`;
+
+export const Card = styled.div`
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-5px);
   }
+`;
+
+export const CardTitle = styled.h3`
+  margin: 0 0 10px;
+  font-size: 1.5rem;
+`;
+
+export const CardText = styled.p`
+  margin: 4px 0;
+  color: #555;
+`;
+
+export const CardButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 8px;
+`;
+
+export const Notification = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  opacity: ${(props) => (props.show ? 1 : 0)};
+  transition: opacity 0.5s ease-in-out;
 `;

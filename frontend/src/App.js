@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import QuestionnaireCatalog from "./QuestionnaireCatalog";
-import QuestionnaireBuilder from "./QuestionnaireBulider";
-import RunQuestionnaire from "./RunQuestionnaire";
+import QuestionnaireCatalog from "./components/QuestionnaireCatalog";
+import QuestionnaireBuilder from "./components/QuestionnaireBuilder";
+import RunQuestionnaire from "./components/RunQuestionnaire";
 
 function App() {
   return (

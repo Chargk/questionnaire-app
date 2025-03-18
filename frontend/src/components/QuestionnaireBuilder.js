@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { db } from "./FirebaseConfig";
+import { db } from "../FirebaseConfig";
 import { collection, addDoc } from "firebase/firestore";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   max-width: 600px;
@@ -41,8 +42,10 @@ const Button = styled.button`
 `;
 
 const QuestionnaireBuilder = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const addQuestion = () => {
     setQuestions([...questions, { text: "", type: "text", options: [] }]);
@@ -74,13 +77,15 @@ const QuestionnaireBuilder = () => {
       alert("Please enter a title and at least one question.");
       return;
     }
+    setLoading(true);
     await addDoc(collection(db, "questionnaires"), {
       name: title,
       questions,
     });
-    alert("Questionnaire saved!");
     setTitle("");
     setQuestions([]);
+    setLoading(false);
+    navigate("/", { state: { success: true } });
   };
 
   return (
@@ -125,8 +130,12 @@ const QuestionnaireBuilder = () => {
         </div>
       ))}
       <Button onClick={addQuestion}>Add Question</Button>
-      <Button onClick={saveQuestionnaire} style={{ marginTop: "10px" }}>
-        Save Questionnaire
+      <Button
+        onClick={saveQuestionnaire}
+        disabled={loading}
+        style={{ marginTop: "10px" }}
+      >
+        {loading ? "Saving..." : "Save Questionnaire"}
       </Button>
     </Container>
   );
