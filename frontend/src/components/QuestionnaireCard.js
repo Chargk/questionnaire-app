@@ -46,7 +46,7 @@ const Button = styled.button`
   }
 `;
 
-const QuestionnaireCard = ({ questionnaire, onDelete }) => {
+const QuestionnaireCard = ({ questionnaire, onRequestDelete }) => {
   const navigate = useNavigate();
 
   return (
@@ -62,7 +62,9 @@ const QuestionnaireCard = ({ questionnaire, onDelete }) => {
       </div>
       <CardButtonGroup>
         <Button onClick={() => alert("Edit feature coming soon!")}>Edit</Button>
-        <Button onClick={() => onDelete(questionnaire.id)}>Delete</Button>
+        <Button onClick={() => onRequestDelete(questionnaire.id)}>
+          Delete
+        </Button>
         <Button onClick={() => navigate(`/run/${questionnaire.id}`)}>
           Run
         </Button>
