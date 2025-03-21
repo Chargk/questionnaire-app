@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import {
   FormContainer,
@@ -7,37 +7,42 @@ import {
   Label,
   Input,
   SaveButton,
-} from "../styles/QuestionnaireBuilder.styles";
+} from "../styles/EditQuestionnaire.styles";
 
-function QuestionnaireBuilder() {
+const EditQuestionnaire = () => {
+  const { id } = useParams();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:5000/api/questionnaires/${id}`);
+      const data = await res.json();
+      setName(data.name);
+      setDescription(data.description);
+    };
+
+    fetchData();
+  }, [id]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const questionnaire = {
-      name,
-      description,
-      questions: [],
-      completions: 0,
-    };
-
-    await fetch("http://localhost:5000/api/questionnaires", {
-      method: "POST",
+    await fetch(`http://localhost:5000/api/questionnaires/${id}`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(questionnaire),
+      body: JSON.stringify({ name, description }),
     });
 
     setLoading(false);
-    navigate("/", { state: { success: true } });
+    navigate("/", { state: { edited: true } });
   };
 
   return (
     <FormContainer>
-      <Title>Create New Questionnaire</Title>
+      <Title>Edit Questionnaire</Title>
       <form onSubmit={handleSubmit}>
         <Label>Name:</Label>
         <Input
@@ -54,11 +59,11 @@ function QuestionnaireBuilder() {
         />
 
         <SaveButton type="submit">
-          {loading ? <ClipLoader color="#fff" size={18} /> : "Save"}
+          {loading ? <ClipLoader color="#fff" size={18} /> : "Save changes"}
         </SaveButton>
       </form>
     </FormContainer>
   );
-}
+};
 
-export default QuestionnaireBuilder;
+export default EditQuestionnaire;

@@ -4,6 +4,8 @@ import QuestionnaireCatalog from "./components/QuestionnaireCatalog";
 import QuestionnaireBuilder from "./components/QuestionnaireBuilder";
 import RunQuestionnaire from "./components/RunQuestionnaire";
 import { AnimatePresence, motion } from "framer-motion";
+import Header, { ContentContainer } from "./styles/Header";
+import EditQuestionnaire from "./components/EditQuestionnaire";
 
 const pageTransition = {
   initial: { opacity: 0, y: 20 },
@@ -29,34 +31,40 @@ function App() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route
-          path="/"
-          element={
-            <AnimatedPage>
-              <QuestionnaireCatalog />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/create-questionnaire"
-          element={
-            <AnimatedPage>
-              <QuestionnaireBuilder />
-            </AnimatedPage>
-          }
-        />
-        <Route
-          path="/run/:id"
-          element={
-            <AnimatedPage>
-              <RunQuestionnaire />
-            </AnimatedPage>
-          }
-        />
-      </Routes>
-    </AnimatePresence>
+    <>
+      <Header />
+      <ContentContainer>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/"
+              element={
+                <AnimatedPage>
+                  <QuestionnaireCatalog />
+                </AnimatedPage>
+              }
+            />
+            <Route
+              path="/create-questionnaire"
+              element={
+                <AnimatedPage>
+                  <QuestionnaireBuilder />
+                </AnimatedPage>
+              }
+            />
+            <Route
+              path="/run/:id"
+              element={
+                <AnimatedPage>
+                  <RunQuestionnaire />
+                </AnimatedPage>
+              }
+            />
+            <Route path="/edit/:id" element={<EditQuestionnaire />} />
+          </Routes>
+        </AnimatePresence>
+      </ContentContainer>
+    </>
   );
 }
 

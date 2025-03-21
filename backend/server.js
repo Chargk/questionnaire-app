@@ -81,5 +81,15 @@ app.put("/api/questionnaires/:id", async (req, res) => {
   }
 });
 
+app.post("/api/questionnaires", async (req, res) => {
+  try {
+    const data = req.body;
+    const docRef = await db.collection("questionnaires").add(data);
+    res.json({ message: "Questionnaire created", id: docRef.id });
+  } catch (error) {
+    res.status(500).json({ message: "Error creating questionnaire", error });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

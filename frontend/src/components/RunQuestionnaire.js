@@ -3,106 +3,74 @@ import { useParams } from "react-router-dom";
 import {
   Container,
   Title,
-  Description,
-  Info,
-  Button,
-} from "../styles/GlobalStyles";
+  QuestionBlock,
+  QuestionText,
+  Input,
+  SubmitButton,
+} from "../styles/RunQuestionnaire.styles";
 
-function RunQuestionnaire() {
+const RunQuestionnaire = () => {
   const { id } = useParams();
   const [questionnaire, setQuestionnaire] = useState(null);
-  const [answers, setAnswers] = useState({});
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/questionnaires/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched questionnaire:", data);
-        setQuestionnaire(data);
-        setLoading(false);
-      })
-      .catch((error) => console.error("Error fetching questionnaire:", error));
+    const fetchData = async () => {
+      const res = await fetch(`http://localhost:5000/api/questionnaires/${id}`);
+      const data = await res.json();
+
+      if (typeof data.questions === "string") {
+        data.questions = JSON.parse(data.questions);
+      }
+
+      setQuestionnaire(data);
+    };
+
+    fetchData();
   }, [id]);
 
-  const handleChange = (questionId, value) => {
-    setAnswers({ ...answers, [questionId]: value });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Answers submitted! (Mock)");
   };
 
-  const handleSubmit = () => {
-    console.log("User answers:", answers);
-    alert("Your responses have been submitted!");
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (!questionnaire) return <p>Questionnaire not found.</p>;
+  if (!questionnaire) return <p>Loading...</p>;
 
   return (
     <Container>
       <Title>{questionnaire.name}</Title>
-      <Description>{questionnaire.description}</Description>
-      <Info>Number of questions: {questionnaire.questions?.length || 0}</Info>
-
-      <form onSubmit={(e) => e.preventDefault()}>
-        {questionnaire.questions && questionnaire.questions.length > 0 ? (
-          questionnaire.questions.map((q) => (
-            <div key={q.id}>
-              <p>{q.text}</p>
-
+      <p>{questionnaire.description}</p>
+      <form onSubmit={handleSubmit}>
+        {questionnaire.questions &&
+          questionnaire.questions.map((q, index) => (
+            <QuestionBlock key={index}>
+              <QuestionText>{q.text}</QuestionText>
               {q.type === "text" && (
-                <input
-                  type="text"
-                  value={answers[q.id] || ""}
-                  onChange={(e) => handleChange(q.id, e.target.value)}
-                />
+                <Input type="text" placeholder="Your answer" />
               )}
-
               {q.type === "single" &&
-                q.options?.map((option) => (
-                  <label key={option}>
-                    <input
-                      type="radio"
-                      name={q.id}
-                      value={option}
-                      checked={answers[q.id] === option}
-                      onChange={() => handleChange(q.id, option)}
-                    />
-                    {option}
-                  </label>
+                q.options.map((opt, idx) => (
+                  <div key={idx}>
+                    <label>
+                      <input type="radio" name={`q${index}`} value={opt} />{" "}
+                      {opt}
+                    </label>
+                  </div>
                 ))}
-
               {q.type === "multiple" &&
-                q.options?.map((option) => (
-                  <label key={option}>
-                    <input
-                      type="checkbox"
-                      value={option}
-                      checked={answers[q.id]?.includes(option) || false}
-                      onChange={(e) => {
-                        const newAnswers = answers[q.id] || [];
-                        if (e.target.checked) {
-                          newAnswers.push(option);
-                        } else {
-                          newAnswers.splice(newAnswers.indexOf(option), 1);
-                        }
-                        handleChange(q.id, [...newAnswers]);
-                      }}
-                    />
-                    {option}
-                  </label>
+                q.options.map((opt, idx) => (
+                  <div key={idx}>
+                    <label>
+                      <input type="checkbox" name={`q${index}`} value={opt} />{" "}
+                      {opt}
+                    </label>
+                  </div>
                 ))}
-            </div>
-          ))
-        ) : (
-          <p>No questions available.</p>
-        )}
-
-        <Button type="submit" onClick={handleSubmit}>
-          Submit
-        </Button>
+            </QuestionBlock>
+          ))}
+        <SubmitButton type="submit">Submit Answers</SubmitButton>
       </form>
     </Container>
   );
-}
+};
 
 export default RunQuestionnaire;

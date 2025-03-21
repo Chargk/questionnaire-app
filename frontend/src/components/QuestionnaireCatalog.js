@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import QuestionnaireCard from "./QuestionnaireCard";
-import { Container, Title, Grid, Button } from "../styles/GlobalStyles";
+import {
+  Container,
+  Title,
+  Grid,
+  Button,
+} from "../styles/QuestionnaireCatalog.styles";
 import DeleteNotification from "../styles/DeleteNotification";
 import SuccessNotification from "../styles/SuccessNotification";
 import ConfirmModal from "../styles/ConfirmModal";
+import EditedNotification from "../styles/EditedNotification";
 import { AnimatePresence, motion } from "framer-motion";
 
 function QuestionnaireCatalog() {
@@ -14,11 +20,11 @@ function QuestionnaireCatalog() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteNotification, setShowDeleteNotification] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showEdited, setShowEdited] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:5000/api/questionnaires?page=${page}&limit=5`)
@@ -26,7 +32,6 @@ function QuestionnaireCatalog() {
       .then((data) => {
         setQuestionnaires(data?.questionnaires || data || []);
         setTotalPages(data.totalPages || 1);
-        setLoading(false);
       })
       .catch((error) => console.error("Error fetching questionnaires:", error));
   }, [page]);
@@ -36,6 +41,14 @@ function QuestionnaireCatalog() {
       setShowSuccess(true);
       setTimeout(() => {
         setShowSuccess(false);
+        navigate("/", { replace: true, state: {} });
+      }, 3000);
+    }
+
+    if (location.state?.edited) {
+      setShowEdited(true);
+      setTimeout(() => {
+        setShowEdited(false);
         navigate("/", { replace: true, state: {} });
       }, 3000);
     }
@@ -103,6 +116,10 @@ function QuestionnaireCatalog() {
       <SuccessNotification
         show={showSuccess}
         message="Questionnaire created successfully!"
+      />
+      <EditedNotification
+        show={showEdited}
+        message="Questionnaire edited successfully!"
       />
       <DeleteNotification
         show={showDeleteNotification}
