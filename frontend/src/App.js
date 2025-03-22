@@ -6,6 +6,7 @@ import RunQuestionnaire from "./components/RunQuestionnaire";
 import { AnimatePresence, motion } from "framer-motion";
 import Header, { ContentContainer } from "./styles/Header";
 import EditQuestionnaire from "./components/EditQuestionnaire";
+import Statistics from "./components/StatisticPage";
 
 const pageTransition = {
   initial: { opacity: 0, y: 20 },
@@ -61,6 +62,7 @@ function App() {
               }
             />
             <Route path="/edit/:id" element={<EditQuestionnaire />} />
+            <Route path="/statistics/:id" element={<Statistics />} />
           </Routes>
         </AnimatePresence>
       </ContentContainer>

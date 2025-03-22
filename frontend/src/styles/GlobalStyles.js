@@ -90,3 +90,67 @@ export const Notification = styled.div`
   opacity: ${(props) => (props.show ? 1 : 0)};
   transition: opacity 0.5s ease-in-out;
 `;
+export const StatsButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #6f42c1;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #5a34a3;
+  }
+`;
+
+export const PaginationButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #28a745;
+  color: white;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #218838;
+  }
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+`;
+
+export const DangerButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #dc3545;
+  color: white;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #b52d3a;
+  }
+`;
+
+export const PrimaryButton = styled.button`
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;

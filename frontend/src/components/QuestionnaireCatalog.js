@@ -6,12 +6,14 @@ import {
   Title,
   Grid,
   Button,
-} from "../styles/QuestionnaireCatalog.styles";
+  StatsButton,
+  PaginationButton,
+} from "../styles/GlobalStyles";
 import DeleteNotification from "../styles/DeleteNotification";
 import SuccessNotification from "../styles/SuccessNotification";
 import ConfirmModal from "../styles/ConfirmModal";
-import EditedNotification from "../styles/EditedNotification";
 import { AnimatePresence, motion } from "framer-motion";
+import { BarChart3 } from "lucide-react";
 
 function QuestionnaireCatalog() {
   const [questionnaires, setQuestionnaires] = useState([]);
@@ -20,9 +22,8 @@ function QuestionnaireCatalog() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showDeleteNotification, setShowDeleteNotification] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [showEdited, setShowEdited] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
-  const [loadingDelete, setLoadingDelete] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -44,14 +45,6 @@ function QuestionnaireCatalog() {
         navigate("/", { replace: true, state: {} });
       }, 3000);
     }
-
-    if (location.state?.edited) {
-      setShowEdited(true);
-      setTimeout(() => {
-        setShowEdited(false);
-        navigate("/", { replace: true, state: {} });
-      }, 3000);
-    }
   }, [location.state, navigate]);
 
   const handleDeleteQuestionnaire = async (id) => {
@@ -70,6 +63,7 @@ function QuestionnaireCatalog() {
   return (
     <Container>
       <Title>Questionnaire Catalog</Title>
+
       <Grid>
         <AnimatePresence>
           {questionnaires.map((q) => (
@@ -81,8 +75,12 @@ function QuestionnaireCatalog() {
               transition={{ duration: 0.4 }}
             >
               <QuestionnaireCard
-                questionnaire={q}
-                onRequestDelete={(id) => {
+                id={q.id}
+                title={q.name}
+                description={q.description}
+                questions={q.questions}
+                completionCount={q.completions}
+                onDelete={(id) => {
                   setPendingDeleteId(id);
                   setShowConfirm(true);
                 }}
@@ -93,18 +91,21 @@ function QuestionnaireCatalog() {
       </Grid>
 
       <div style={{ textAlign: "center", marginTop: "20px" }}>
-        <Button disabled={page === 1} onClick={() => setPage(page - 1)}>
+        <PaginationButton
+          disabled={page === 1}
+          onClick={() => setPage(page - 1)}
+        >
           ← Back
-        </Button>
+        </PaginationButton>
         <span style={{ margin: "0 10px" }}>
           {page} / {totalPages}
         </span>
-        <Button
+        <PaginationButton
           disabled={page === totalPages}
           onClick={() => setPage(page + 1)}
         >
           Next →
-        </Button>
+        </PaginationButton>
       </div>
 
       <div style={{ textAlign: "center", marginTop: "20px" }}>
@@ -117,10 +118,6 @@ function QuestionnaireCatalog() {
         show={showSuccess}
         message="Questionnaire created successfully!"
       />
-      <EditedNotification
-        show={showEdited}
-        message="Questionnaire edited successfully!"
-      />
       <DeleteNotification
         show={showDeleteNotification}
         message="Questionnaire deleted successfully!"
@@ -128,9 +125,7 @@ function QuestionnaireCatalog() {
       <ConfirmModal
         show={showConfirm}
         onConfirm={async () => {
-          setLoadingDelete(true);
           await handleDeleteQuestionnaire(pendingDeleteId);
-          setLoadingDelete(false);
           setShowConfirm(false);
           setPendingDeleteId(null);
         }}

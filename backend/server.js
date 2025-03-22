@@ -91,5 +91,86 @@ app.post("/api/questionnaires", async (req, res) => {
   }
 });
 
+app.post("/api/answers", async (req, res) => {
+  try {
+    const { questionnaireId, answers } = req.body;
+
+    await db.collection("answers").add({
+      questionnaireId,
+      answers,
+      createdAt: new Date(),
+    });
+
+    const questionnaireRef = db
+      .collection("questionnaires")
+      .doc(questionnaireId);
+    await questionnaireRef.update({
+      completions: admin.firestore.FieldValue.increment(1),
+    });
+
+    res.status(200).json({ message: "Answers submitted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Error saving answers", error });
+  }
+});
+
+app.get("/api/statistics/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const questionnaireDoc = await db
+      .collection("questionnaires")
+      .doc(id)
+      .get();
+    if (!questionnaireDoc.exists) {
+      return res.status(404).json({ message: "Questionnaire not found" });
+    }
+
+    const questionnaire = questionnaireDoc.data();
+    const questions =
+      typeof questionnaire.questions === "string"
+        ? JSON.parse(questionnaire.questions)
+        : questionnaire.questions;
+
+    const answersSnapshot = await db
+      .collection("answers")
+      .where("questionnaireId", "==", id)
+      .get();
+
+    const answersData = answersSnapshot.docs.map((doc) => doc.data().answers);
+
+    const statistics = {};
+
+    questions.forEach((q) => {
+      const result = {};
+
+      answersData.forEach((answer) => {
+        const response = answer[q.id];
+
+        if (q.type === "single" && response) {
+          result[response] = (result[response] || 0) + 1;
+        }
+
+        if (q.type === "multiple" && Array.isArray(response)) {
+          response.forEach((option) => {
+            result[option] = (result[option] || 0) + 1;
+          });
+        }
+      });
+
+      statistics[q.id] = {
+        text: q.text,
+        type: q.type,
+        results: result,
+      };
+    });
+
+    res.json(statistics);
+  } catch (error) {
+    console.error("Error getting statistics:", error);
+    res.status(500).json({ message: "Error getting statistics", error });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

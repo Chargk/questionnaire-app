@@ -1,41 +1,44 @@
 import React from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { Edit, Trash2, Play } from "lucide-react";
 import {
-  Card,
+  CardContainer,
   CardTitle,
-  CardText,
-  CardButtonGroup,
-  Button,
+  CardDescription,
+  CardInfo,
+  ButtonGroup,
+  CardButton,
+  StatsButton,
 } from "../styles/QuestionnaireCard.styles";
 
-const QuestionnaireCard = ({ questionnaire, onRequestDelete }) => {
+const QuestionnaireCard = ({
+  id,
+  title,
+  description,
+  questions = [],
+  completionCount = 0,
+  onDelete,
+}) => {
   const navigate = useNavigate();
 
   return (
-    <Card>
-      <div>
-        <CardTitle>{questionnaire.name}</CardTitle>
-        <CardText>{questionnaire.description}</CardText>
-        <CardText>
-          Questions:{" "}
-          {questionnaire.questionsCount || questionnaire.questions?.length || 0}
-        </CardText>
-        <CardText>Completions: {questionnaire.completions || 0}</CardText>
-      </div>
-      <CardButtonGroup>
-        <Button onClick={() => navigate(`/edit/${questionnaire.id}`)}>
-          <Edit size={18} /> Edit
-        </Button>
-        <Button onClick={() => onRequestDelete(questionnaire.id)}>
-          <Trash2 size={18} /> Delete
-        </Button>
-        <Button onClick={() => navigate(`/run/${questionnaire.id}`)}>
-          <Play size={18} /> Run
-        </Button>
-      </CardButtonGroup>
-    </Card>
+    <CardContainer>
+      <CardTitle>{title}</CardTitle>
+      <CardDescription>{description}</CardDescription>
+      <CardInfo>Questions: {questions.length}</CardInfo>
+      <CardInfo>Completions: {completionCount}</CardInfo>
+
+      <ButtonGroup>
+        <CardButton onClick={() => navigate(`/edit/${id}`)}>Edit</CardButton>
+        <CardButton onClick={() => onDelete(id)}>Delete</CardButton>
+        <CardButton onClick={() => navigate(`/run/${id}`)}>Run</CardButton>
+      </ButtonGroup>
+
+      {completionCount > 0 && (
+        <StatsButton onClick={() => navigate(`/statistics/${id}`)}>
+          📊 View Statistics
+        </StatsButton>
+      )}
+    </CardContainer>
   );
 };
 
