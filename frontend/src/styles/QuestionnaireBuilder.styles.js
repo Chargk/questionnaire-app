@@ -51,3 +51,124 @@ export const SaveButton = styled.button`
     box-shadow: 0px 4px 12px rgba(40, 167, 69, 0.3);
   }
 `;
+
+export const AddQuestionButton = styled.button`
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+export const QuestionBlock = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+`;
+
+export const QuestionTypeWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+
+  &::after {
+    content: "▼";
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    color: #555;
+    pointer-events: none;
+    font-size: 0.9rem;
+  }
+`;
+
+export const QuestionTypeSelect = styled.select`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 0px 6px rgba(0, 123, 255, 0.4);
+    background-color: #fff;
+  }
+`;
+
+export const OptionInput = styled.input`
+  padding: 6px;
+  margin-bottom: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: calc(100% - 20px);
+`;
+
+export const AddOptionButton = styled.button`
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  &:hover {
+    background-color: #5a6268;
+  }
+`;
+
+export const QuestionSection = styled.div`
+  margin-bottom: 20px;
+`;
+
+export const SmallInput = styled.input`
+  width: calc(100% - 20px);
+  margin-bottom: 8px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+`;
+
+export const QuestionList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+export const QuestionItem = styled.li`
+  padding: 10px;
+  margin-bottom: 8px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+`;
+
+export const RemoveButton = styled.button`
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: 10px;
+  &:hover {
+    background-color: #bd2130;
+  }
+`;

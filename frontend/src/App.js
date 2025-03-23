@@ -1,12 +1,12 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import QuestionnaireCatalog from "./components/QuestionnaireCatalog";
-import QuestionnaireBuilder from "./components/QuestionnaireBuilder";
-import RunQuestionnaire from "./components/RunQuestionnaire";
+import QuestionnaireCatalog from "./pages/QuestionnaireCatalog";
+import QuestionnaireBuilder from "./pages/QuestionnaireBuilder";
+import RunQuestionnaire from "./pages/RunQuestionnaire";
 import { AnimatePresence, motion } from "framer-motion";
 import Header, { ContentContainer } from "./styles/Header";
-import EditQuestionnaire from "./components/EditQuestionnaire";
-import Statistics from "./components/StatisticPage";
+import EditQuestionnaire from "./pages/EditQuestionnaire";
+import Statistics from "./pages/StatisticsPage";
 
 const pageTransition = {
   initial: { opacity: 0, y: 20 },
