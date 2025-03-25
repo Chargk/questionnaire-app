@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Container,
   Title,
@@ -7,118 +8,113 @@ import {
   QuestionText,
   Input,
   SubmitButton,
+  Spinner,
+  ButtonGroup,
+  Button,
+  ThankYouScreen,
 } from "../styles/RunQuestionnaire.styles";
-import SubmissionNotification from "../styles/SubmissionNotification";
 
-const RunQuestionnaire = () => {
+const RunQuestionnairePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [questionnaire, setQuestionnaire] = useState(null);
-  const [answers, setAnswers] = useState({});
-  const [showNotification, setShowNotification] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [answers, setAnswers] = useState([]);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await fetch(`http://localhost:5000/api/questionnaires/${id}`);
-      const data = await res.json();
-
-      if (typeof data.questions === "string") {
-        data.questions = JSON.parse(data.questions);
-      }
-
-      setQuestionnaire(data);
-    };
-
-    fetchData();
+    fetch(`http://localhost:5000/api/questionnaires/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setQuestionnaire(data);
+        setAnswers(new Array(data.questions.length).fill(""));
+      });
   }, [id]);
 
-  const handleAnswerChange = (questionId, value) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: value }));
+  const handleChange = (value) => {
+    const updated = [...answers];
+    updated[currentStep] = value;
+    setAnswers(updated);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await fetch("http://localhost:5000/api/answers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionnaireId: id, answers }),
-    });
-
-    setShowNotification(true);
-    setTimeout(() => {
-      setShowNotification(false);
-      navigate("/");
-    }, 2500);
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    try {
+      await fetch(`http://localhost:5000/api/questionnaires/${id}/submit`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers }),
+      });
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Submit error", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  if (!questionnaire) return <p>Loading...</p>;
+  if (!questionnaire) return <Container>Loading...</Container>;
+
+  if (submitted)
+    return (
+      <ThankYouScreen>
+        <h2>Спасибо за прохождение анкеты! 🎉</h2>
+        <Button onClick={() => navigate("/")}>На главную</Button>
+      </ThankYouScreen>
+    );
+
+  const currentQuestion = questionnaire.questions[currentStep];
 
   return (
     <Container>
       <Title>{questionnaire.name}</Title>
-      <p>{questionnaire.description}</p>
-      <form onSubmit={handleSubmit}>
-        {questionnaire.questions &&
-          questionnaire.questions.map((q, index) => (
-            <QuestionBlock key={index}>
-              <QuestionText>{q.text}</QuestionText>
-              {q.type === "text" && (
-                <Input
-                  type="text"
-                  placeholder="Your answer"
-                  onChange={(e) => handleAnswerChange(q.id, e.target.value)}
-                />
-              )}
-              {q.type === "single" &&
-                q.options.map((opt, idx) => (
-                  <div key={idx}>
-                    <label>
-                      <input
-                        type="radio"
-                        name={`q${index}`}
-                        value={opt}
-                        onChange={() => handleAnswerChange(q.id, opt)}
-                      />{" "}
-                      {opt}
-                    </label>
-                  </div>
-                ))}
-              {q.type === "multiple" &&
-                q.options.map((opt, idx) => (
-                  <div key={idx}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        name={`q${index}`}
-                        value={opt}
-                        onChange={(e) => {
-                          const currentValues = answers[q.id] || [];
-                          if (e.target.checked) {
-                            handleAnswerChange(q.id, [...currentValues, opt]);
-                          } else {
-                            handleAnswerChange(
-                              q.id,
-                              currentValues.filter((val) => val !== opt)
-                            );
-                          }
-                        }}
-                      />{" "}
-                      {opt}
-                    </label>
-                  </div>
-                ))}
-            </QuestionBlock>
-          ))}
-        <SubmitButton type="submit">Submit Answers</SubmitButton>
-      </form>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentStep}
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -50 }}
+          transition={{ duration: 0.4 }}
+        >
+          <QuestionBlock>
+            <QuestionText>{currentQuestion.text}</QuestionText>
+            <Input
+              type="text"
+              placeholder="Ваш ответ"
+              value={answers[currentStep] || ""}
+              onChange={(e) => handleChange(e.target.value)}
+            />
+          </QuestionBlock>
 
-      <SubmissionNotification
-        show={showNotification}
-        message="Answers submitted successfully!"
-      />
+          <ButtonGroup>
+            <Button
+              disabled={currentStep === 0}
+              onClick={() => setCurrentStep((prev) => prev - 1)}
+            >
+              Назад
+            </Button>
+
+            {currentStep < questionnaire.questions.length - 1 ? (
+              <Button
+                disabled={!answers[currentStep]}
+                onClick={() => setCurrentStep((prev) => prev + 1)}
+              >
+                Далее
+              </Button>
+            ) : (
+              <SubmitButton
+                disabled={!answers[currentStep] || submitting}
+                onClick={handleSubmit}
+              >
+                {submitting ? <Spinner /> : "Отправить"}
+              </SubmitButton>
+            )}
+          </ButtonGroup>
+        </motion.div>
+      </AnimatePresence>
     </Container>
   );
 };
 
-export default RunQuestionnaire;
+export default RunQuestionnairePage;

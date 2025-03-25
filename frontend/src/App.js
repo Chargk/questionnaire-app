@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import QuestionnaireCatalog from "./pages/QuestionnaireCatalog";
+import QuestionnairesPage from "./pages/QuestionnairesPage";
 import QuestionnaireBuilder from "./pages/QuestionnaireBuilder";
 import RunQuestionnaire from "./pages/RunQuestionnaire";
 import { AnimatePresence, motion } from "framer-motion";
@@ -41,7 +41,7 @@ function App() {
               path="/"
               element={
                 <AnimatedPage>
-                  <QuestionnaireCatalog />
+                  <QuestionnairesPage />
                 </AnimatedPage>
               }
             />

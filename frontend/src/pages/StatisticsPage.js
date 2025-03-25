@@ -28,7 +28,6 @@ const StatisticsPage = () => {
 
   useEffect(() => {
     const fetchStats = async () => {
-      // Получаем анкету
       const questionnaireRes = await fetch(
         `http://localhost:5000/api/questionnaires/${id}`
       );
@@ -40,7 +39,6 @@ const StatisticsPage = () => {
 
       setQuestionnaire(questionnaireData);
 
-      // Получаем ответы
       const answersRes = await fetch(`http://localhost:5000/api/answers/${id}`);
       const answersData = await answersRes.json();
       setAnswers(answersData);

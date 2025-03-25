@@ -34,20 +34,75 @@ export const Input = styled.input`
   }
 `;
 
-export const SaveButton = styled.button`
-  padding: 12px 24px;
-  background-color: #28a745;
-  color: white;
+export const Button = styled.button`
+  padding: 10px 20px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
   transition: all 0.3s;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  margin: 5px 5px 5px 0;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
+
   &:hover {
-    background-color: #1f923a;
-    box-shadow: 0px 4px 12px rgba(255, 152, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.08);
   }
+`;
+
+export const AddButton = styled(Button)`
+  background-color: #007bff;
+  color: white;
+
+  &:hover {
+    background-color: #0069d9;
+  }
+`;
+
+export const RemoveButton = styled(Button)`
+  background-color: #dc3545;
+  color: white;
+
+  &:hover {
+    background-color: #b02a37;
+  }
+`;
+
+export const SaveButton = styled(Button)`
+  background-color: #28a745;
+  color: white;
+  font-size: 1rem;
+  padding: 12px 28px;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+export const AddQuestionButton = styled(AddButton)`
+  margin-top: 20px;
+`;
+
+export const QuestionList = styled.div`
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+export const QuestionItem = styled.div`
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  background-color: #fafafa;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+`;
+
+export const OptionInput = styled(Input)`
+  margin-bottom: 10px;
 `;

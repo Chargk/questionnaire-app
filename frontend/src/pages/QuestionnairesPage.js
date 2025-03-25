@@ -6,16 +6,14 @@ import {
   Title,
   Grid,
   Button,
-  StatsButton,
   PaginationButton,
 } from "../styles/GlobalStyles";
 import DeleteNotification from "../styles/DeleteNotification";
 import SuccessNotification from "../styles/SuccessNotification";
 import ConfirmModal from "../styles/ConfirmModal";
 import { AnimatePresence, motion } from "framer-motion";
-import { BarChart3 } from "lucide-react";
 
-function QuestionnaireCatalog() {
+function QuestionnairesPage() {
   const [questionnaires, setQuestionnaires] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -138,4 +136,4 @@ function QuestionnaireCatalog() {
   );
 }
 
-export default QuestionnaireCatalog;
+export default QuestionnairesPage;
