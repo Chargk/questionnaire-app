@@ -154,3 +154,41 @@ export const PrimaryButton = styled.button`
     background-color: #0056b3;
   }
 `;
+
+export const SortSelect = styled.select`
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+  }
+`;
+
+export const SearchInput = styled.input`
+  padding: 12px 16px 12px 42px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 30px auto;
+  display: block;
+  background: url("/search-icon.svg") no-repeat 12px center;
+  background-size: 20px 20px;
+  transition: all 0.3s;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+  }
+
+  &::placeholder {
+    color: #aaa;
+  }
+`;

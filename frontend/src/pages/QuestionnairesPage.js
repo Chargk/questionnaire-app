@@ -7,6 +7,8 @@ import {
   Grid,
   Button,
   PaginationButton,
+  SortSelect,
+  SearchInput,
 } from "../styles/GlobalStyles";
 import DeleteNotification from "../styles/DeleteNotification";
 import SuccessNotification from "../styles/SuccessNotification";
@@ -21,6 +23,8 @@ function QuestionnairesPage() {
   const [showDeleteNotification, setShowDeleteNotification] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState(null);
+  const [sortOption, setSortOption] = useState("name");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,13 +62,41 @@ function QuestionnairesPage() {
     }
   };
 
+  const filteredAndSortedQuestionnaires = questionnaires
+    .filter((q) => q.name.toLowerCase().includes(searchTerm.toLowerCase()))
+    .sort((a, b) => {
+      if (sortOption === "name") return a.name.localeCompare(b.name);
+      if (sortOption === "questions")
+        return (b.questions?.length || 0) - (a.questions?.length || 0);
+      if (sortOption === "completions")
+        return (b.completions || 0) - (a.completions || 0);
+      return 0;
+    });
+
   return (
     <Container>
       <Title>Questionnaire Catalog</Title>
 
+      <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+        <SearchInput
+          type="text"
+          placeholder="Search by title..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <SortSelect
+          value={sortOption}
+          onChange={(e) => setSortOption(e.target.value)}
+        >
+          <option value="name">Sort by name (A-Z)</option>
+          <option value="questions">Sort by questions count</option>
+          <option value="completions">Sort by completions</option>
+        </SortSelect>
+      </div>
+
       <Grid>
         <AnimatePresence>
-          {questionnaires.map((q) => (
+          {filteredAndSortedQuestionnaires.map((q) => (
             <motion.div
               key={q.id}
               initial={{ opacity: 0, scale: 0.95 }}
