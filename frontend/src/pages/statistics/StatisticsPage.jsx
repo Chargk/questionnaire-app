@@ -3,31 +3,16 @@ import { useParams } from "react-router-dom";
 import {
   Container,
   Title,
-  ChartContainer,
-  QuestionBlock,
   GeneralStatsContainer,
   StatsCard,
   StatsGrid,
 } from "../../styles/StatisticsPage.styles.js";
-import {
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Legend,
-  LineChart,
-  Line,
-} from "recharts";
-import {QuestionariesService} from "../../services/questionaries.service";
-import {AnswersService} from "../../services/answers.service";
+import { QuestionariesService } from "../../services/questionaries.service";
+import { AnswersService } from "../../services/answers.service";
 import { formatDuration } from "../../utils/time";
-import TimeBasedStats from './components/TimeBasedStats';
-import ResponsesTimeline from './components/ResponsesTimeline';
-import QuestionStats from './components/QuestionStats';
-const COLORS = ["#007bff", "#28a745", "#ffc107", "#dc3545", "#6f42c1"];
+import TimeBasedStats from "./components/TimeBasedStats";
+import ResponsesTimeline from "./components/ResponsesTimeline";
+import QuestionStats from "./components/QuestionStats";
 
 const StatisticsPage = () => {
   const { id } = useParams();
@@ -37,7 +22,10 @@ const StatisticsPage = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [questionnaireData, answersData] = await Promise.all([QuestionariesService.getQuestionnaire(id), AnswersService.getAnswers(id)])
+        const [questionnaireData, answersData] = await Promise.all([
+          QuestionariesService.getQuestionnaire(id),
+          AnswersService.getAnswers(id),
+        ]);
 
         setQuestionnaire(questionnaireData);
         setAnswers(answersData);
@@ -54,8 +42,8 @@ const StatisticsPage = () => {
 
     answers.forEach((entry) => {
       const userAnswer = entry.answers[qIndex];
-      if (question.type === "multiple" && typeof userAnswer === 'string') {
-        userAnswer.split(',').forEach((option) => {
+      if (question.type === "multiple" && typeof userAnswer === "string") {
+        userAnswer.split(",").forEach((option) => {
           dataMap[option] = (dataMap[option] || 0) + 1;
         });
       } else if (userAnswer) {
@@ -70,18 +58,20 @@ const StatisticsPage = () => {
     if (!answers.length) return null;
 
     // Calculate average completion time
-    const answersWithTimes = answers.filter(a => a.finishTime && a.startTime)
-    const completionTimes = answersWithTimes.map(a => a.finishTime - a.startTime);
-    const averageTime = completionTimes.reduce((a, b) => a + b, 0) / answersWithTimes.length;
+    const answersWithTimes = answers.filter((a) => a.finishTime && a.startTime);
+    const completionTimes = answersWithTimes.map(
+      (a) => a.finishTime - a.startTime
+    );
+    const averageTime =
+      completionTimes.reduce((a, b) => a + b, 0) / answersWithTimes.length;
 
     // Group completions by date
     const timelineData = answersWithTimes.reduce((acc, answer) => {
-      const date = new Date(answer.finishTime).toISOString().split('T')[0];
+      const date = new Date(answer.finishTime).toISOString().split("T")[0];
       acc[date] = (acc[date] || 0) + 1;
       return acc;
     }, {});
 
-  
     const timeSeriesData = Object.entries(timelineData)
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -115,9 +105,9 @@ const StatisticsPage = () => {
             </StatsCard>
           </StatsGrid>
 
-          <TimeBasedStats 
-            answers={answers} 
-            totalResponses={generalStats.totalResponses} 
+          <TimeBasedStats
+            answers={answers}
+            totalResponses={generalStats.totalResponses}
           />
 
           <ResponsesTimeline timelineData={generalStats.timelineData} />

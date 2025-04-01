@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Button} from "./EditQuestionnaire.styles";
+import { Button } from "./EditQuestionnaire.styles";
 
 export const FormContainer = styled.div`
   max-width: 700px;
@@ -8,12 +8,21 @@ export const FormContainer = styled.div`
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 20px;
+  }
 `;
 
 export const Title = styled.h2`
   font-size: 2rem;
   margin-bottom: 20px;
   color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export const Label = styled.label`
@@ -28,6 +37,7 @@ export const Input = styled.input`
   border-radius: 8px;
   width: calc(100% - 20px);
   margin-bottom: 20px;
+
   &:focus {
     outline: none;
     border-color: #007bff;
@@ -47,6 +57,7 @@ export const SaveButton = styled.button`
   display: flex;
   align-items: center;
   gap: 8px;
+
   &:hover {
     background-color: #1f923a;
     box-shadow: 0px 4px 12px rgba(40, 167, 69, 0.3);
@@ -61,6 +72,7 @@ export const AddQuestionButton = styled.button`
   border: none;
   border-radius: 8px;
   cursor: pointer;
+
   &:hover {
     background-color: #0056b3;
   }
@@ -132,7 +144,8 @@ export const AddOptionButton = styled.button`
   padding: 6px 12px;
   border-radius: 6px;
   cursor: pointer;
-	margin-bottom: 8px;
+  margin-bottom: 8px;
+
   &:hover {
     background-color: #5a6268;
   }
@@ -166,6 +179,7 @@ export const RemoveButton = styled(Button)`
   background-color: #dc3545;
   color: white;
   margin-left: 10px;
+
   &:hover {
     background-color: #bd2130;
   }

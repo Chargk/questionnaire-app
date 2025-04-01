@@ -7,12 +7,21 @@ export const FormContainer = styled.div`
   padding: 30px;
   border-radius: 20px;
   box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 20px;
+  }
 `;
 
 export const Title = styled.h2`
   font-size: 2rem;
   margin-bottom: 20px;
   color: #333;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
 `;
 
 export const Label = styled.label`
@@ -52,6 +61,11 @@ export const Button = styled.button`
     transform: translateY(-2px);
     box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.08);
   }
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
 `;
 
 export const AddButton = styled(Button)`
@@ -82,6 +96,11 @@ export const SaveButton = styled(Button)`
   &:hover {
     background-color: #218838;
   }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 10px 24px;
+  }
 `;
 
 export const AddQuestionButton = styled(AddButton)`
@@ -101,6 +120,10 @@ export const QuestionItem = styled.div`
   border-radius: 12px;
   background-color: #fafafa;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.03);
+
+  @media (max-width: 768px) {
+    padding: 15px;
+  }
 `;
 
 export const OptionInput = styled(Input)`
