@@ -93,13 +93,16 @@ const RunQuestionnairePage = () => {
 
       setFormatterAnswers(formattedAnswers);
 
+      const finishTime = Date.now();
+
       await QuestionariesService.submitAnswer(
         id,
         formattedAnswers,
         startTime,
-        setFinishTime(Date.now())
+        finishTime
       );
 
+      setFinishTime(finishTime);
       setSubmitted(true);
       localStorage.removeItem(localStorageProgressKey);
     } catch (error) {
